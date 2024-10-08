@@ -27,7 +27,6 @@ jobs:
       - uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: ${{ inputs.dotnet-version }}
-      - if
       - name: Format
         run: |
           if [[ ${{ github.ref }} == "refs/heads/main" || ${{ github.ref }} == "refs/heads/master" ]]; then
