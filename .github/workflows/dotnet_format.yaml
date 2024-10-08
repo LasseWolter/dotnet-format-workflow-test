@@ -1,0 +1,47 @@
+name: Dotnet format
+
+on:
+  workflow_call:
+    inputs:
+      dotnet-version:
+        description: dotnet version for the service
+        type: string
+        default: "6.0"
+      ref:
+        description: The ref of the branch that triggered the workflow. For PRs, github.head_ref can be used.
+        type: string
+        required: true
+      workspace:
+        description: The filepath for the dotnet solution
+        type: string
+        default: "."
+
+jobs:
+  dotnet-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.ref }}
+      - uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+      - if
+      - name: Format
+        run: |
+          if [[ ${{ github.ref }} == "refs/heads/main" || ${{ github.ref }} == "refs/heads/master" ]]; then
+            echo "Detected TBD - running dotnet format accordingly"
+            diff=$(git diff --name-only ${{ github.event.push.before }}...${{ github.event.push.after }})
+            dotnet format ${{ inputs.workspace }} --no-restore --report Output/ --verify-no-changes --include $diff
+          else
+            echo "Normal format - no TBD"
+            diff=$(git diff --name-only origin/main...${{ inputs.ref }})
+            dotnet format ${{ inputs.workspace }} --no-restore --report Output/ --verify-no-changes --include $diff
+          fi
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: Output
+          path: Output/
+
