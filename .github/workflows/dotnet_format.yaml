@@ -31,7 +31,7 @@ jobs:
         run: |
           if [[ ${{ github.ref }} == "refs/heads/main" || ${{ github.ref }} == "refs/heads/master" ]]; then
             echo "Detected TBD - running dotnet format accordingly"
-            diff=$(git diff --name-only ${{ github.event.push.before }}...${{ github.event.push.after }})
+            diff=$(git diff --name-only "${{ github.event.push.before }}...${{ github.event.push.after }}")
             dotnet format ${{ inputs.workspace }} --no-restore --report Output/ --verify-no-changes --include $diff
           else
             echo "Normal format - no TBD"
