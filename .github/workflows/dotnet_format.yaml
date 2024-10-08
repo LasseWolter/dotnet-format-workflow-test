@@ -11,6 +11,14 @@ on:
         description: The ref of the branch that triggered the workflow. For PRs, github.head_ref can be used.
         type: string
         required: true
+      event:
+        description: The event that triggered the workflow. 
+        type: string
+        required: true
+      event2:
+        description: The event that triggered the workflow. 
+        type: string
+        required: true
       workspace:
         description: The filepath for the dotnet solution
         type: string
@@ -29,6 +37,8 @@ jobs:
           dotnet-version: ${{ inputs.dotnet-version }}
       - name: Format
         run: |
+          echo ${{ inputs.event }}
+          echo ${{ inputs.event2 }}
           if [[ ${{ github.ref }} == "refs/heads/main" || ${{ github.ref }} == "refs/heads/master" ]]; then
             echo "Detected TBD - running dotnet format accordingly"
             diff=$(git diff --name-only "${{ github.event.push.before }}...${{ github.event.push.after }}")

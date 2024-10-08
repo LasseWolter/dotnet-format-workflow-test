@@ -9,6 +9,8 @@ jobs:
   dotnet-format:
     uses: ./.github/workflows/dotnet_format.yaml
     with:
-      ref: ${{ github.head_ref }}
+      ref: ${{ github.ref }}
       workspace: ./src
       dotnet-version: 6.0
+      event: ${{ github.event.push.before }}
+      event2: ${{ github.event.push.after }}
