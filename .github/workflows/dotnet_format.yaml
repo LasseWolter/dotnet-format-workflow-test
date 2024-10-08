@@ -28,14 +28,13 @@ jobs:
         with:
           dotnet-version: ${{ inputs.dotnet-version }}
       - name: Format
+        if: ${{ github.event.type == "PushEvent" }} # need push event payload to get event.before/event.after below
         run: |
+          # Trunk based development
           if [[ ${{ github.ref }} == "refs/heads/main" || ${{ github.ref }} == "refs/heads/master" ]]; then
-            echo "Detected TBD - running dotnet format accordingly"
             diff=$(git diff --name-only "${{ github.event.before }}...${{ github.event.after }}")
-            echo $diff
             dotnet format ${{ inputs.workspace }} --no-restore --report Output/ --verify-no-changes --include $diff
           else
-            echo "Normal format - no TBD"
             diff=$(git diff --name-only origin/main...${{ inputs.ref }})
             dotnet format ${{ inputs.workspace }} --no-restore --report Output/ --verify-no-changes --include $diff
           fi
