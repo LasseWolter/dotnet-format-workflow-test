@@ -12,5 +12,4 @@ jobs:
       ref: ${{ github.ref }}
       workspace: ./src
       dotnet-version: 6.0
-      event: ${{ github.event.before }}
-      event2: ${{ github.event.after }}
+      event: ${{ github.event}}
