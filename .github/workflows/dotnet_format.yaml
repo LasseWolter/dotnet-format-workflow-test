@@ -30,7 +30,6 @@ jobs:
       - name: Format
         if: ${{ github.event_name == 'push' }} # need push event payload to get event.before/event.after below
         run: |
-          echo ${{ github.event_name }}
           if [[ ${{ github.ref }} == "refs/heads/main" || ${{ github.ref }} == "refs/heads/master" ]]; then 
           # Trunk based development
             diff=$(git diff --name-only "${{ github.event.before }}...${{ github.event.after }}")
