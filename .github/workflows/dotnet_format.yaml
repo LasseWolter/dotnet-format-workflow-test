@@ -33,11 +33,10 @@ jobs:
           if [[ ${{ github.ref }} == "refs/heads/main" || ${{ github.ref }} == "refs/heads/master" ]]; then 
           # Trunk based development
             diff=$(git diff --name-only "${{ github.event.before }}...${{ github.event.after }}")
-            dotnet format ${{ inputs.workspace }} --no-restore --report Output/ --verify-no-changes --include $diff
           else
             diff=$(git diff --name-only origin/main...${{ inputs.ref }})
-            dotnet format ${{ inputs.workspace }} --no-restore --report Output/ --verify-no-changes --include $diff
           fi
+          dotnet format ${{ inputs.workspace }} --no-restore --report Output/ --verify-no-changes --include $diff
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
