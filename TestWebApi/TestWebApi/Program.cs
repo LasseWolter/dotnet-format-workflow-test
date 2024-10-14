@@ -20,8 +20,8 @@ var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
-    
-app.MapGet("/weatherforecast",      () =>
+
+app.MapGet("/weatherforecast", () =>
     {
         var forecast = Enumerable.Range(1, 5).Select(index =>
                 new WeatherForecast
@@ -35,7 +35,7 @@ app.MapGet("/weatherforecast",      () =>
     })
     .WithName("GetWeatherForecast")
     .WithOpenApi();
-    
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
