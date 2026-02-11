@@ -10,5 +10,5 @@ jobs:
     uses: ./.github/workflows/dotnet_format.yaml
     with:
       ref: ${{ github.ref }}
-      workspace: "./TestWebApi"
+      workspace: "TestWebApi"
       dotnet-version: 6.0

@@ -41,5 +41,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: "format-Output-${{ inputs.workspace }}"
+          name: "format-Output"
           path: Output/
