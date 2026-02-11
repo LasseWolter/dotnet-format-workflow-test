@@ -24,22 +24,22 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ inputs.ref }}
-      - uses: actions/setup-dotnet@v3.0.3
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ inputs.dotnet-version }}
       - name: Format
-        if: ${{ github.event_name == 'push' }} # need push event payload to get event.before/event.after below
         run: |
-          if [[ ${{ github.ref }} == "refs/heads/main" || ${{ github.ref }} == "refs/heads/master" ]]; then 
-          # Trunk based development
+          if [[ ("${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/master") && "${{ github.event_name }}" == "push" ]]; then
+          # Trunk based development (needs to be push event to access event.before/event.after below)
             diff=$(git diff --name-only "${{ github.event.before }}...${{ github.event.after }}")
           else
             diff=$(git diff --name-only origin/main...${{ inputs.ref }})
           fi
-          dotnet format ${{ inputs.workspace }} --no-restore --report Output/ --verify-no-changes --include $diff
-      - uses: actions/upload-artifact@v3
+          if [[ -n $diff ]]; then
+            dotnet format ${{ inputs.workspace }} --no-restore --report Output/ --verify-no-changes --include $diff
+          fi
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: Output
+          name: "format-Output-${{ inputs.workspace }}"
           path: Output/
-
